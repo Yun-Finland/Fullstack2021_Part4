@@ -1,11 +1,22 @@
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
 
-{   
-   "title": "joke1",
-   "author": "testAuthor",
-   "url": "http://test/1",
-   "likes": 30
+{      
+   "title": "React patterns",
+   "author": "Michael Chan",
+   "url": "https://reactpatterns.com/",
+   "likes": 7  
+}
+
+###
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+
+{      
+   "title": "Go To Statement Considered Harmful",
+   "author": "Edsger W. Dijkstra",
+   "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+   "likes": 5
 }
 
 ###
