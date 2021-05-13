@@ -1,0 +1,46 @@
+// request-1 create user
+post http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+   "username": "yun",
+   "name": "yunxiao",
+   "password": "yunpassword"
+}
+
+###
+
+post http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+   "username": "test1",
+   "name": "test1test1",
+   "password": "test1password"
+}
+
+// request-2 invalid username test
+###
+post http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+   "username": "te",
+   "name": "yunxiao",
+   "password": "testtest"
+}
+
+// request-3 invalid password test
+###
+post http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+   "username": "test",
+   "name": "yunxiao",
+   "password": "te"
+}
+
+// request-4 get all users with blogs info
+###
+get http://localhost:3003/api/users

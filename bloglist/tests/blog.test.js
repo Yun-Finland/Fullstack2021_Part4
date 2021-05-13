@@ -4,6 +4,8 @@ const helper = require('./test_helper.js')
 const app = require('../app.js')
 const api = supertest(app)
 const Blog = require('../models/blog.js')
+const User = require('../models/user.js')
+const bcrypt = require('bcrypt')
 
 beforeEach(async ()=> {
   await Blog.deleteMany({})
@@ -178,6 +180,102 @@ describe('Update of a blog', ()=>{
     expect(blogsAtStart[0].likes).not.toEqual(blogsAtEnd[0].likes)
   })
 
+})
+
+describe('when there is initially one user in db', ()=>{
+  beforeEach( async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User ({username: 'root', passwordHash})
+
+    await user.save()
+  })
+
+  test('creation succeeds with a fresh username', async ()=> {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'test1',
+      name: 'test1 yun',
+      password: 'test1_password'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+
+    const usernames = usersAtEnd.map(user => user.username)
+    expect(usernames).toContain(newUser.username)
+  })
+
+  test('creation fails with invalid username', async ()=>{
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 't2',
+      name: 'test1 yun',
+      password: 'test2_password'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type',/application\/json/)
+    
+    expect(result.body.error).toContain('User validation failed: username: Path `username` (`t2`) is shorter than the minimum allowed length (3).')
+    
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('creation fails with invalid password', async ()=>{
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'test2',
+      name: 'test1 yun',
+      password: 't2'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    
+    expect(result.body.error).toContain('password is shorter than minimum allowed length (3)')
+    
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('creation fails if username already taken', async ()=>{
+    const usersAtStart = await helper.usersInDb()
+
+    const newUser = {
+      username: 'root',
+      name: 'test3',
+      password: 'testpassword3'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    
+    expect(result.body.error).toContain('`username` to be unique')
+    
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)    
+  })
 })
 
 afterAll(()=>{

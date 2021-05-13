@@ -1,0 +1,94 @@
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+
+{      
+   "title": "React patterns",
+   "author": "Michael Chan",
+   "url": "https://reactpatterns.com/",
+   "likes": 7  
+}
+
+###
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+
+{      
+   "title": "Go To Statement Considered Harmful",
+   "author": "Edsger W. Dijkstra",
+   "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+   "likes": 5
+}
+
+###
+GET http://localhost:3003/api/blogs/
+
+###
+DELETE http://localhost:3003/api/blogs/609d5d9d73570146e83b0ad6
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWQiOiI2MDlkNTM3MmU3ZmFhNTQ5YmNmMTQzODgiLCJpYXQiOjE2MjA5MjU2NjAsImV4cCI6MTYyMDkyOTI2MH0.rb7ZBsFgccfagvxAtQpNd55kWVo5gWmiNJpYy1aHwmI
+
+###
+PUT http://localhost:3003/api/blogs/609c1f4b3dfd586b34f5148d
+Content-Type: application/json
+
+{      
+   "title": "Go To Statement Considered Harmful",
+   "author": "Edsger W. Dijkstra",
+   "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+   "likes": 15
+}
+
+###
+// post blog 1
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWQiOiI2MDlkNTM3MmU3ZmFhNTQ5YmNmMTQzODgiLCJpYXQiOjE2MjA5MjQ5MjMsImV4cCI6MTYyMDkyODUyM30.HAp4Uo_nEElHc-5Uoxyux0iyKa-51N_wK6JwTgfBsgY
+
+{      
+   "title": "React patterns",
+   "author": "Michael Chan",
+   "url": "https://reactpatterns.com/",
+   "likes": 7,
+   "user": "609ccbcd38e3f10690269b57"
+}
+
+### 
+// post blog 2
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWQiOiI2MDlkNTM3MmU3ZmFhNTQ5YmNmMTQzODgiLCJpYXQiOjE2MjA5MjU2NjAsImV4cCI6MTYyMDkyOTI2MH0.rb7ZBsFgccfagvxAtQpNd55kWVo5gWmiNJpYy1aHwmI
+
+{      
+   "title": "Go To Statement Considered Harmful",
+   "author": "Edsger W. Dijkstra",
+   "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+   "likes": 15,
+   "user": "609d5372e7faa549bcf14388"
+}
+
+###
+// post blog 3
+POST http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWQiOiI2MDlkNTM3MmU3ZmFhNTQ5YmNmMTQzODgiLCJpYXQiOjE2MjA5MjU2NjAsImV4cCI6MTYyMDkyOTI2MH0.rb7ZBsFgccfagvxAtQpNd55kWVo5gWmiNJpYy1aHwmI
+
+{      
+   "title": "First class tests",
+   "author": "Robert C. Martin",
+   "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+   "likes": 10,
+   "user": "609d5372e7faa549bcf14388"
+}
+
+###
+// delete only when the creator is the same
+DELETE  http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inl1biIsImlkIjoiNjA5Y2YyMzRlYjA5Y2Y0ZjE0OTgwZTQxIiwiaWF0IjoxNjIwODk4NDU3LCJleHAiOjE2MjA5MDIwNTd9.SXIMqS9PXazHmx8lX-Wmv0Ey17PIRlgBZcnG41cG0JE
+
+{      
+   "title": "First class tests",
+   "author": "Robert C. Martin",
+   "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+   "likes": 10,
+   "user": "609ccbcd38e3f10690269b57"
+}
