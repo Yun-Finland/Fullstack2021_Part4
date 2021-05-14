@@ -8,10 +8,23 @@ const User = require('../models/user.js')
 const bcrypt = require('bcrypt')
 
 beforeEach(async ()=> {
+  await User.deleteMany({})   
+
+  for (let user of helper.initialUsers){
+    await api
+      .post('/api/users')
+      .send(user)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  }
+
+  const usersAtStart = await helper.usersInDb()
+
   await Blog.deleteMany({})
 
   for (let blog of helper.initialBlogs){
     let blogObject = new Blog(blog)
+    blogObject.user = usersAtStart[0].id
     await blogObject.save()
   }
 
@@ -79,16 +92,29 @@ describe('Viewing a specific blog', ()=>{
 describe('add a new blog', ()=>{
 
   test('a valid blog can be added', async ()=>{
+    const usersAtStart = await helper.usersInDb()
 
+    const validUser = usersAtStart[0]
+
+    const result = await api
+      .post('/api/login')
+      .send({username: 'test1', password: 'test1_password'})
+      .expect(200)
+      .expect('Content-Type',/application\/json/)
+    
+    const validToken = result.body.token    
+  
     const newBlog = {
       title: "Canonical string reduction",
       author: "Edsger W. Dijkstra",
       url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
       likes: 12,
+      user: validUser.id,
     }
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${validToken}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type',/application\/json/)  
@@ -101,15 +127,28 @@ describe('add a new blog', ()=>{
   })
 
   test('Likes Property will defult to 0 if missing', async ()=>{
+    const usersAtStart = await helper.usersInDb()
+
+    const validUser = usersAtStart[0]
+
+    const result = await api
+      .post('/api/login')
+      .send({username: 'test1', password: 'test1_password'})
+      .expect(200)
+      .expect('Content-Type',/application\/json/)
+    
+    const validToken = result.body.token
 
     const newBlog = {
       title: "Canonical string reduction",
       author: "Edsger W. Dijkstra",
       url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+      user: validUser.id
     }
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${validToken}`)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -126,28 +165,75 @@ describe('add a new blog', ()=>{
   })
 
   test('Blog without title and url will not be added', async ()=> {
+    const usersAtStart = await helper.usersInDb()
+
+    const validUser = usersAtStart[0]
+
+    const result = await api
+      .post('/api/login')
+      .send({username: 'test1', password: 'test1_password'})
+      .expect(200)
+      .expect('Content-Type',/application\/json/)
+    
+    const validToken = result.body.token
+
     const newBlog = {
       author: "Edsger W. Dijkstra",
       likes: 7,
+      user: validUser.id
     }
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${validToken}`)
       .send(newBlog)
       .expect(400)
     
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
   })
+
+  test('Adding a blog fails with the proper status code 401 Unauthorized if a token is not provided', async ()=>{
+    
+    const newBlog = {
+      title: "Canonical string reduction",
+      author: "Edsger W. Dijkstra",
+      url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
+      likes: 12,
+    }
+  
+    const result = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+      .expect('Content-Type',/application\/json/)  
+
+    expect(result.body.error).toContain(`Unauthorized`)
+  
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+ 
+  })
 })
 
 describe('deletion of a blog', ()=>{
+
   test('succeeds with status code 204 if id is valid', async ()=>{
+
+    const result = await api
+      .post('/api/login')
+      .send({username: 'test1', password: 'test1_password'})
+      .expect(200)
+      .expect('Content-Type',/application\/json/)
+    
+    const validToken = result.body.token 
+
     const blogsAtStart = await helper.blogsInDb()
     const blogToBeDelete = blogsAtStart[0]
 
     await api
       .delete(`/api/blogs/${blogToBeDelete.id}`)
+      .set('Authorization', `bearer ${validToken}`)
       .expect(204)
     
     const notesAtEnd = await helper.blogsInDb()
