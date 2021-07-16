@@ -19,6 +19,22 @@ blogsRouter.get('/:id', async (request, response) => {
   
 })
 
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+
+  const body = request.body
+  const newComment = body.comment
+  console.log('1. new comment here:', newComment)
+
+  blog.comments = await blog.comments.concat(newComment)
+  console.log('2. here is the comments', blog.comments)
+  
+  await blog.save()
+  console.log('3.new blog', blog)
+
+  response.json({"added comment": `${newComment}`})
+} )
+
 blogsRouter.post('/', middleware.tokenExtractor, middleware.userExtractor, async (request, response) => {
 
   const body = request.body

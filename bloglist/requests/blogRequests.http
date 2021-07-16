@@ -27,7 +27,7 @@ DELETE http://localhost:3003/api/blogs/609d5d9d73570146e83b0ad6
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWQiOiI2MDlkNTM3MmU3ZmFhNTQ5YmNmMTQzODgiLCJpYXQiOjE2MjA5MjU2NjAsImV4cCI6MTYyMDkyOTI2MH0.rb7ZBsFgccfagvxAtQpNd55kWVo5gWmiNJpYy1aHwmI
 
 ###
-PUT http://localhost:3003/api/blogs/609c1f4b3dfd586b34f5148d
+PUT http://localhost:3003/api/blogs/609d5d4973570146e83b0ad5
 Content-Type: application/json
 
 {      
@@ -69,14 +69,14 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc
 // post blog 3
 POST http://localhost:3003/api/blogs/
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QxIiwiaWQiOiI2MDlkNTM3MmU3ZmFhNTQ5YmNmMTQzODgiLCJpYXQiOjE2MjA5MjU2NjAsImV4cCI6MTYyMDkyOTI2MH0.rb7ZBsFgccfagvxAtQpNd55kWVo5gWmiNJpYy1aHwmI
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inl1biIsImlkIjoiNjA5Y2YyMzRlYjA5Y2Y0ZjE0OTgwZTQxIiwiaWF0IjoxNjI2NDYzMzUwLCJleHAiOjE2MjY0NjY5NTB9.VajOplisI6gy0D3UKcY1of7DEynW4tLC2kfbItxjF9w
 
-{      
-   "title": "First class tests",
-   "author": "Robert C. Martin",
-   "url": "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-   "likes": 10,
-   "user": "609d5372e7faa549bcf14388"
+{           
+   "title": "React patterns",
+   "author": "Michael Chan",
+   "url": "https://reactpatterns.com/",
+   "likes": 7,
+   "user": "609cf234eb09cf4f14980e41"
 }
 
 ###
